@@ -34,18 +34,21 @@ public class List {
         } else {
             first = new Node(new CharData(chr), first);
         }
-
+        size++;
     }
     
     /** GIVE Textual representation of this list. */
     public String toString() {
         Node current = first;
-        String ans = "";
+        String ans = "(";
         while (current != null) {
-            ans = ans + "/n" + current.toString();
+            ans = ans + current.cp.toString();
+            if (current.next != null) {
+                ans = ans + " ";
+            }
             current = current.next;
         }
-        return ans;
+        return ans + ")";
     }
 
     /** Returns the index of the first CharData object in this list
@@ -55,7 +58,7 @@ public class List {
         int index = 0;
         Node current = first;
         while (current != null) {
-            if (current.cp.equals(chr)) {
+            if (current.cp.chr == chr) {
                 return index;
             }
             index++;
@@ -69,18 +72,14 @@ public class List {
      *  given chr to the beginning of this list. */
     public void update(char chr) {
         Node current = first;
-        boolean found = false;
-        while (current != null || found == true) {
-            if (current.cp.equals(chr)) {
+        while (current != null) {
+            if (current.cp.chr == chr) {
                 current.cp.count++;
-                found = true;
+                return;
             }
             current = current.next;
         }
-        if (!found) {
             addFirst(chr);
-        }
-
     }
 
     /** GIVE If the given character exists in one of the CharData objects
@@ -90,7 +89,8 @@ public class List {
         Node previous = null;
         Node current = first;
         while (current != null) {
-            if (current.cp.equals(chr)) {
+            if (current.cp.chr ==chr) {
+                size--;
                 if (previous == null) {
                     first = first.next;
                     return true;
@@ -109,12 +109,12 @@ public class List {
      *  If the index is negative or is greater than the size of this list, 
      *  throws an IndexOutOfBoundsException. */
     public CharData get(int index) {
-        if(index < 0 || index > size) {
+        if(index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(index + "i is out of bound ");
         }
         Node current = first;
-        for(int i = 0; i < index + 1; i++){
-            current = first.next;
+        for(int i = 0; i < index; i++){
+            current = current.next;
         }
         return current.cp;
     }
